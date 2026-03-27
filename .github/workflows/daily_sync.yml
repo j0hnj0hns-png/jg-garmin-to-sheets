@@ -2,9 +2,9 @@ name: Garmin to Sheets Sync
 
 on:
   schedule:
-    # This runs every 6 hours: 08:00, 14:00, 20:00, and 02:00 Bangkok Time
+    # Runs at 08:00, 14:00, 20:00, and 02:00 Bangkok Time
     - cron: '0 1,7,13,19 * * *'
-  workflow_dispatch: # This is what gives you the manual "Run workflow" button
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -22,7 +22,6 @@ jobs:
         run: pip install .
 
       - name: Create Google Credentials File
-        # This creates the folder the script is looking for
         run: |
           mkdir -p credentials
           echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials/client_secret.json
@@ -32,7 +31,6 @@ jobs:
           USER1_GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
           USER1_GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
           USER1_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
-          # This tells the script where to find the "key" we just created
           GOOGLE_CLIENT_SECRET_PATH: "credentials/client_secret.json"
-        # We use the direct 'python -m' command to bypass the CLI version clash
-        run: python -m src.main cli-sync --start-date 2026-03-01 --profile USER1 --output-type sheets
+        # We removed 'sync' and 'cli-sync' - just the flags!
+        run: python -m src.main --start-date 2026-03-01 --profile USER1 --output-type sheets
