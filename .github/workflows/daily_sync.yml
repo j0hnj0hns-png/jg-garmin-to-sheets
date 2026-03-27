@@ -28,4 +28,4 @@ jobs:
           USER1_GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
           USER1_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: garmingo --profile USER1 --upload
+        run: garmingo sync --profile USER1
