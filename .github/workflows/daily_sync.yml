@@ -1,0 +1,31 @@
+name: Garmin to Sheets Sync
+
+on:
+  schedule:
+    # Runs at 01:00, 07:00, 13:00, and 19:00 UTC
+    # Which is 08:00, 14:00, 20:00, and 02:00 Bangkok Time
+    - cron: '0 1,7,13,19 * * *'
+  workflow_dispatch: # Allows you to run it manually with a button
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install .
+
+      - name: Run Sync Script
+        env:
+          USER1_GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          USER1_GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+          USER1_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: garmingo --profile USER1 --upload
